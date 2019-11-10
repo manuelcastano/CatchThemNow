@@ -1,0 +1,7 @@
+#nivel
+0
+#radio posX posY espera direccion rebotes
+70	120	120	12	DERECHA	0	false
+98	100	140	17	IZQUIERDA	0	false
+89	200	250	5	ABAJO	0	false
+21	52	64	3	ARRIBA	0	false
