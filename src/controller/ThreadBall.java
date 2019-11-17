@@ -1,19 +1,19 @@
 package controller;
 
-import javafx.scene.control.Button;
+import javafx.scene.shape.Circle;
 import model.Ball;
 
 public class ThreadBall implements Runnable{
 	
-	private Button b;
 	private Ball ball;
+	private Circle circle;
 	
-	
-	public ThreadBall(Button b, Ball ball) {
-		this.b = b;
+	public ThreadBall(Ball ball, Circle circle) {
+		super();
 		this.ball = ball;
+		this.circle = circle;
 	}
-	
+
 	public Ball getBall() {
 		return ball;
 	}
@@ -21,45 +21,21 @@ public class ThreadBall implements Runnable{
 	public void setBall(Ball ball) {
 		this.ball = ball;
 	}
-
-	public Button getB() {
-		return b;
-	}
-	public void setB(Button b) {
-		this.b = b;
-	}
 	
+	public Circle getCircle() {
+		return circle;
+	}
+
+	public void setCircle(Circle circle) {
+		this.circle = circle;
+	}
+
 	@Override
 	public void run() {
 		while(!ball.isStopped()) {
-			if(ball.getDirection().equals("DERECHA")) {
-				b.setLayoutX(b.getLayoutX()+1);
-				if(b.getLayoutX() == 600-ball.getDiameter()) {
-					ball.setDirection("IZQUIERDA");
-					ball.setBounces(ball.getBounces()+1);
-				}
-			}
-			else if(ball.getDirection().equals("IZQUIERDA")){
-				b.setLayoutX(b.getLayoutX()-1);
-				if(b.getLayoutX() == 0) {
-					ball.setDirection("DERECHA");
-					ball.setBounces(ball.getBounces()+1);
-				}
-			}
-			else if(ball.getDirection().equals("ARRIBA")){
-				b.setLayoutY(b.getLayoutY()-1);
-				if(b.getLayoutY() == 25) {
-					ball.setDirection("ABAJO");
-					ball.setBounces(ball.getBounces()+1);
-				}
-			}
-			else if(ball.getDirection().equals("ABAJO")){
-				b.setLayoutY(b.getLayoutY()+1);
-				if(b.getLayoutY() == 400-ball.getDiameter()) {
-					ball.setDirection("ARRIBA");
-					ball.setBounces(ball.getBounces()+1);
-				}
-			}
+			ball.moveBall();
+			circle.setCenterX(ball.getPosX());
+			circle.setCenterY(ball.getPosY());
 			try {
 				Thread.sleep(ball.getWaitTime());
 			} catch (InterruptedException e) {

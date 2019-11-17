@@ -187,8 +187,8 @@ public class Game {
 					}
 				}
 				if(!added) {
-					if(players0.size() < 10) {
-						players0.add(p);
+					if(players1.size() < 10) {
+						players1.add(p);
 						added = true;
 					}
 				}
@@ -211,8 +211,8 @@ public class Game {
 					}
 				}
 				if(!added) {
-					if(players0.size() < 10) {
-						players0.add(p);
+					if(players1.size() < 10) {
+						players1.add(p);
 						added = true;
 					}
 				}
@@ -295,5 +295,18 @@ public class Game {
 			}
 		}
 		return msg;
+	}
+	
+	public void saveGame() throws IOException {
+		String msg = "#nivel"+"\n";
+		msg += level+"\n";
+		msg += "#diametro posX posY espera direccion rebotes"+"\n";
+		for(int i = 0; i < balls.size(); i++) {
+			msg += balls.get(i).toString()+"\n";
+		}
+		File f = new File(fileBalls);
+		BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+		bw.write(msg);
+		bw.close();
 	}
 }

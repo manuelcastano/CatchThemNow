@@ -63,4 +63,43 @@ public class Ball {
 	public void setStopped(boolean stopped) {
 		this.stopped = stopped;
 	}
+	
+	public void moveBall() {
+		if(direction.equals("DERECHA")) {
+			posX++;
+			if(posX == 600-(diameter/2)) {
+				direction = "IZQUIERDA";
+				bounces++;
+			}
+		}
+		else if(direction.equals("IZQUIERDA")){
+			posX--;
+			if(posX == (diameter/2)) {
+				direction = "DERECHA";
+				bounces++;
+			}
+		}
+		else if(direction.equals("ARRIBA")){
+			posY--;
+			if(posY == 25+(diameter/2)) {
+				direction = "ABAJO";
+				bounces++;
+			}
+		}
+		else if(direction.equals("ABAJO")){
+			posY++;
+			if(posY == 400-(diameter/2)) {
+				direction = "ARRIBA";
+				bounces++;
+			}
+		}
+	}
+
+	@Override
+	public String toString() {
+		return diameter + "\t" + posX + "\t" + posY + "\t" + waitTime
+				+ "\t" + direction + "\t" + bounces + "\t" + stopped;
+	}
+	
+	
 }

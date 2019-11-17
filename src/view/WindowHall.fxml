@@ -13,7 +13,7 @@
             <Font size="25.0" />
          </font>
       </Label>
-      <TextField fx:id="tf" layoutX="208.0" layoutY="179.0" prefHeight="42.0" prefWidth="185.0" />
+      <TextField fx:id="tf" layoutX="208.0" layoutY="179.0" onAction="#submit" prefHeight="42.0" prefWidth="185.0" />
       <Button layoutX="253.0" layoutY="264.0" mnemonicParsing="false" onMouseClicked="#submit" text="Submit">
          <font>
             <Font size="21.0" />

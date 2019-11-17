@@ -4,18 +4,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
@@ -38,6 +36,13 @@ public class WindowGameController implements Initializable{
 		MenuItem sg = new MenuItem("Save Game");
 		MenuItem e = new MenuItem("Exit");
 		MenuItem bs = new MenuItem("Best Scores");
+		MenuItem ag = new MenuItem("About the game");
+		ag.setOnAction(x -> {
+			aboutTheGame();
+		});
+		sg.setOnAction(y -> {
+			saveGame();
+		});
 		lg.setOnAction(p -> {
 			loadGame();
 		});
@@ -55,7 +60,7 @@ public class WindowGameController implements Initializable{
 			stage.show();
 		});
 		file.getItems().addAll(lg, sg, e);
-		see.getItems().addAll(bs);
+		see.getItems().addAll(bs, ag);
 		mb.getMenus().addAll(file, see);
 		mb.setMinWidth(600);
 		mb.setMinHeight(25);
@@ -96,24 +101,15 @@ public class WindowGameController implements Initializable{
 		stopped = 0;
 		ArrayList<Ball> balls = game.getBalls();
 		for(int i = 0; i < balls.size(); i++) {
-			Button b = new Button();
-			b.setLayoutX(balls.get(i).getPosX());
-			b.setLayoutY(balls.get(i).getPosY());
-			b.setShape(new Circle(balls.get(i).getDiameter()/2));
-			b.setMinSize(balls.get(i).getDiameter(), balls.get(i).getDiameter()); 
-			b.setMaxSize(balls.get(i).getDiameter(), balls.get(i).getDiameter());
-			b.setId(balls.get(i).getWaitTime()+"");
-			int l = i;
-			b.setOnAction(e -> {
-				balls.get(l).setStopped(true);
+			if(balls.get(i).isStopped()) {
 				stopped++;
-				if(stopped == balls.size()) {
-					finish();
-				}
-			});
-			Runnable ball = new ThreadBall(b, balls.get(i));
+			}
+			Circle circle = new Circle(balls.get(i).getDiameter()/2);
+			circle.setCenterX(balls.get(i).getPosX());
+			circle.setCenterY(balls.get(i).getPosY());
+			ap.getChildren().add(circle);
+			Runnable ball = new ThreadBall(balls.get(i), circle);
 			new Thread(ball).start();
-			ap.getChildren().add(b);
 		}
 	}
 	
@@ -152,5 +148,57 @@ public class WindowGameController implements Initializable{
 			s.setScene(scene);
 			s.show();
 		}
+	}
+	
+	public void stopBall(MouseEvent e) {
+		ArrayList<Ball> balls = game.getBalls();
+		for(int i = 0; i < balls.size(); i++) {
+			if(!balls.get(i).isStopped()) {
+				double x = e.getSceneX()-(balls.get(i).getPosX());
+				x *= x;
+				double y = e.getSceneY()-(balls.get(i).getPosY());
+				y *= y;
+				double sum = x+y;
+				double radius = balls.get(i).getDiameter()/2;
+				radius *= radius;
+				if(sum <= radius) {
+					balls.get(i).setStopped(true);
+					stopped++;
+				}
+			}
+		}
+		if(stopped == balls.size()) {
+			finish();
+		}
+	}
+	
+	public void saveGame() {
+		try {
+			game.saveGame();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		exit();
+	}
+	
+	public void aboutTheGame() {
+		Stage stage = new Stage();
+		AnchorPane anchor = new AnchorPane();
+		String msg = "En el juego aparecen unas esferas en la pantalla moviéndose, "
+				+ "algunas horizontal y otras verticalmente. "
+				+ "Durante su movimiento, "
+				+ "si la esfera alcanza un extremo de la ventana de juego, "
+				+ "ésta rebotará  y se moverá ahora en sentido contrario. "
+				+ "El jugador debe detenerlas haciendo clic sobre cada una de las esferas que aparecen en la pantalla, "
+				+ "lo más rápido posible y antes de que reboten. Por cada rebote, el contador de rebotes aumentará. "
+				+ "El mejor jugador es aquel que detenga todas las esferas con la menor cantidad de rebotes.\r\n";
+		Label l = new Label(msg);
+		l.setMaxSize(300, 300);
+		l.setWrapText(true);
+		anchor.getChildren().add(l);
+		Scene scene = new Scene(anchor, 300, 300);
+		stage.setScene(scene);
+		stage.setTitle("About the game");
+		stage.show();
 	}
 }
