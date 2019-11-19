@@ -1,7 +1,7 @@
 #nivel
 1
 #diametro posX posY espera direccion rebotes
-70	493	120	12	DERECHA	0	false
-98	352	140	17	DERECHA	1	false
-89	200	322	5	ARRIBA	7	false
-21	52	178	8	ABAJO	11	false
+70	519	120	12	DERECHA	8	false
+98	420	140	17	IZQUIERDA	13	false
+89	200	264	5	ARRIBA	73	false
+21	52	206	8	ARRIBA	46	false

@@ -1,4 +1,4 @@
-package controller;
+package threads;
 
 import javafx.scene.shape.Circle;
 import model.Ball;

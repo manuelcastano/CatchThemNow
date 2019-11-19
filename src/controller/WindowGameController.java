@@ -1,4 +1,4 @@
-package controller;
+ package controller;
 
 import java.io.IOException;
 import java.net.URL;
@@ -19,6 +19,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import model.Ball;
 import model.Game;
+import threads.ThreadBall;
 
 public class WindowGameController implements Initializable{
 	
